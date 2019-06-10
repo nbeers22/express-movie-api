@@ -12,7 +12,6 @@ app.use(function authorizeApp(req,res,next){
   }
 
   if(bearerToken !== apiToken){
-    console.log("not equal")
     return res.status(401).json({
       error: "Unauthorized Request - Bad Token"
     });
@@ -49,6 +48,15 @@ const handleGetMovie = (req,res) => {
 
 app.get('/movie',handleGetMovie);
 
-app.listen(4000, () => {
-  console.log(`Server started on port:4000`);
+app.use((error,req,res,next) => {
+  let response;
+  if (process.env.NODE_ENV){
+    response = {error: { message: "server error"}}
+  }else{
+    response = { error }
+  }
+  res.status(500).json(response)
 });
+
+const PORT = process.env.PORT || 4000
+app.listen(PORT, () => {});

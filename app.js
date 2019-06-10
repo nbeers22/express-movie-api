@@ -5,6 +5,7 @@ const morgan = require('morgan');
 
 const app = express();
 app.use(helmet());
-app.use(morgan("dev"));
+const morganSetting = process.env.NODE_ENV === "production" ? "tiny" : "dev";
+app.use(morgan(morganSetting));
 
 module.exports = app;
